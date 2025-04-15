@@ -15,7 +15,6 @@ travis-ci = { repository = "manuel-woelker/rust-vfs", branch = "master" }
 [dependencies]
 rust-embed = { version = "8", optional = true }
 async-std = { version = "1", optional = true }
-async-trait = { version = "0", optional = true }
 tokio = { version = "1", features = ["macros", "rt"], optional = true }
 futures = { version = "0", optional = true }
 async-recursion = { version = "1", optional = true }
@@ -30,7 +29,7 @@ tokio-test = "0"
 
 [features]
 embedded-fs = ["rust-embed"]
-async-vfs = ["tokio", "async-std", "async-trait", "futures", "async-recursion"]
+async-vfs = ["tokio", "async-std", "futures", "async-recursion"]
 export-test-macros = ["camino"]
 
 [package.metadata.docs.rs]

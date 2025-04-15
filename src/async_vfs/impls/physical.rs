@@ -10,7 +10,6 @@ use async_std::{
     io::{ErrorKind, Write},
     path::{Path, PathBuf},
 };
-use async_trait::async_trait;
 use filetime::FileTime;
 use futures::stream::{Stream, StreamExt};
 use std::{pin::Pin, time::SystemTime};
@@ -63,7 +62,6 @@ where
     }
 }
 
-#[async_trait]
 impl AsyncFileSystem for AsyncPhysicalFS {
     async fn read_dir(
         &self,
