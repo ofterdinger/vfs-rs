@@ -34,10 +34,10 @@ impl MemoryFS {
 
     fn ensure_has_parent(&self, path: &str) -> VfsResult<()> {
         let separator = path.rfind('/');
-        if let Some(index) = separator {
-            if self.exists(&path[..index])? {
-                return Ok(());
-            }
+        if let Some(index) = separator
+            && self.exists(&path[..index])?
+        {
+            return Ok(());
         }
         Err(VfsErrorKind::Other("Parent path does not exist".into()).into())
     }
@@ -136,7 +136,7 @@ impl Seek for ReadableFile {
 
 impl FileSystem for MemoryFS {
     fn read_dir(&self, path: &str) -> VfsResult<Box<dyn Iterator<Item = String> + Send>> {
-        let prefix = format!("{}/", path);
+        let prefix = format!("{path}/");
         let handle = self.handle.read().unwrap();
         let mut found_directory = false;
         #[allow(clippy::needless_collect)] // need collect to satisfy lifetime requirements

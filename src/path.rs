@@ -48,7 +48,11 @@ pub(crate) trait PathLike: Clone {
         if path.is_empty() {
             return Ok(in_path.to_string());
         }
-        let mut new_components: Vec<&str> = vec![];
+        let mut new_components: Vec<&str> = Vec::with_capacity(
+            in_path.chars().filter(|c| *c == '/').count()
+                + path.chars().filter(|c| *c == '/').count()
+                + 1,
+        );
         let mut base_path = if path.starts_with('/') {
             "".to_string()
         } else {
@@ -73,9 +77,15 @@ pub(crate) trait PathLike: Clone {
             }
         }
         let mut path = base_path;
+        path.reserve(
+            new_components.len()
+                + new_components
+                    .iter()
+                    .fold(0, |accum, part| accum + part.len()),
+        );
         for component in new_components {
-            path += "/";
-            path += component
+            path.push('/');
+            path.push_str(component);
         }
         Ok(path)
     }
@@ -275,9 +285,9 @@ impl VfsPath {
                 match error.kind() {
                     VfsErrorKind::DirectoryExists => {}
                     _ => {
-                        return Err(error.with_path(directory).with_context(|| {
-                            format!("Could not create directories at '{}'", path)
-                        }));
+                        return Err(error
+                            .with_path(directory)
+                            .with_context(|| format!("Could not create directories at '{path}'")));
                     }
                 }
             }
@@ -315,7 +325,7 @@ impl VfsPath {
                         .with_context(|| "Could not read directory")
                 })?
                 .map(move |path| VfsPath {
-                    path: format!("{}/{}", parent, path).into(),
+                    path: format!("{parent}/{path}").into(),
                     fs: fs.clone(),
                 }),
         ))
@@ -371,16 +381,14 @@ impl VfsPath {
         let parent = self.parent();
         if !parent.exists()? {
             return Err(VfsError::from(VfsErrorKind::Other(format!(
-                "Could not {}, parent directory does not exist",
-                action
+                "Could not {action}, parent directory does not exist"
             )))
             .with_path(&*self.path));
         }
         let metadata = parent.metadata()?;
         if metadata.file_type != VfsFileType::Directory {
             return Err(VfsError::from(VfsErrorKind::Other(format!(
-                "Could not {}, parent path is not a directory",
-                action
+                "Could not {action}, parent path is not a directory"
             )))
             .with_path(&*self.path));
         }

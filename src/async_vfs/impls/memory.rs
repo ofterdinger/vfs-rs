@@ -42,10 +42,10 @@ impl AsyncMemoryFS {
 
     async fn ensure_has_parent(&self, path: &str) -> VfsResult<()> {
         let separator = path.rfind('/');
-        if let Some(index) = separator {
-            if self.exists(&path[..index]).await? {
-                return Ok(());
-            }
+        if let Some(index) = separator
+            && self.exists(&path[..index]).await?
+        {
+            return Ok(());
         }
         Err(VfsErrorKind::Other("Parent path does not exist".into()).into())
     }
@@ -168,7 +168,7 @@ impl AsyncFileSystem for AsyncMemoryFS {
         &self,
         path: &str,
     ) -> VfsResult<Box<dyn Unpin + Stream<Item = String> + Send>> {
-        let prefix = format!("{}/", path);
+        let prefix = format!("{path}/");
         let handle = self.handle.read().await;
         let mut found_directory = false;
         #[allow(clippy::needless_collect)] // need collect to satisfy lifetime requirements

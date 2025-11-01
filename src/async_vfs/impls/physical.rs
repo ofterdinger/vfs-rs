@@ -50,8 +50,7 @@ where
             Ok(val) => val,
             Err(err) => {
                 return Err(VfsError::from(VfsErrorKind::Other(format!(
-                    "Tokio Concurrency Error: {}",
-                    err
+                    "Tokio Concurrency Error: {err}"
                 ))));
             }
         }?;

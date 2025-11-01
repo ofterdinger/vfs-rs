@@ -202,9 +202,9 @@ impl AsyncVfsPath {
                 match error.kind() {
                     VfsErrorKind::DirectoryExists => {}
                     _ => {
-                        return Err(error.with_path(directory).with_context(|| {
-                            format!("Could not create directories at '{}'", path)
-                        }));
+                        return Err(error
+                            .with_path(directory)
+                            .with_context(|| format!("Could not create directories at '{path}'")));
                     }
                 }
             }
@@ -247,12 +247,9 @@ impl AsyncVfsPath {
                     err.with_path(&self.path)
                         .with_context(|| "Could not read directory")
                 })?
-                .map(move |path| {
-                    println!("{:?}", path);
-                    AsyncVfsPath {
-                        path: format!("{}/{}", parent, path),
-                        fs: fs.clone(),
-                    }
+                .map(move |path| AsyncVfsPath {
+                    path: format!("{parent}/{path}"),
+                    fs: fs.clone(),
                 }),
         ))
     }
@@ -313,16 +310,14 @@ impl AsyncVfsPath {
         let parent = self.parent();
         if !parent.exists().await? {
             return Err(VfsError::from(VfsErrorKind::Other(format!(
-                "Could not {}, parent directory does not exist",
-                action
+                "Could not {action}, parent directory does not exist"
             )))
             .with_path(&self.path));
         }
         let metadata = parent.metadata().await?;
         if metadata.file_type != VfsFileType::Directory {
             return Err(VfsError::from(VfsErrorKind::Other(format!(
-                "Could not {}, parent path is not a directory",
-                action
+                "Could not {action}, parent path is not a directory"
             )))
             .with_path(&self.path));
         }
@@ -1030,7 +1025,7 @@ pub struct WalkDirIterator {
     // Used to store futures when poll_next returns pending
     // this ensures a new future is not spawned on each poll.
     read_dir_fut: Option<
-        BoxFuture<'static, Result<Box<(dyn Stream<Item = AsyncVfsPath> + Send + Unpin)>, VfsError>>,
+        BoxFuture<'static, Result<Box<dyn Stream<Item = AsyncVfsPath> + Send + Unpin>, VfsError>>,
     >,
     metadata_fut: Option<BoxFuture<'static, Result<VfsMetadata, VfsError>>>,
 }
