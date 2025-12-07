@@ -8,7 +8,6 @@ use async_std::{
     io::{Cursor, Read, Seek, SeekFrom, Write, prelude::SeekExt},
     sync::{Arc, RwLock},
 };
-use async_trait::async_trait;
 use futures::{
     Stream, StreamExt,
     task::{Context, Poll},
@@ -164,7 +163,6 @@ impl Seek for AsyncReadableFile {
     }
 }
 
-#[async_trait]
 impl AsyncFileSystem for AsyncMemoryFS {
     async fn read_dir(
         &self,
