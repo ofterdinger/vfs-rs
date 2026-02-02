@@ -4,7 +4,6 @@ use crate::{
     error::VfsErrorKind,
 };
 use async_std::io::Write;
-use async_trait::async_trait;
 use futures::stream::{Stream, StreamExt};
 use std::{collections::HashSet, time::SystemTime};
 
@@ -82,7 +81,6 @@ impl AsyncOverlayFS {
     }
 }
 
-#[async_trait]
 impl AsyncFileSystem for AsyncOverlayFS {
     async fn read_dir(
         &self,
