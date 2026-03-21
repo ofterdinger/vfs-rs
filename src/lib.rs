@@ -46,6 +46,9 @@
 //! # }
 //! ```
 //!
+//! # Feature flags
+//!
+//! - `export-test-macros`: exports the test macros `test_vfs!` and `test_vfs_readonly!` which can be used to test your own `FileSystem` implementations
 //!
 #![allow(unknown_lints)]
 #![allow(clippy::upper_case_acronyms)]
