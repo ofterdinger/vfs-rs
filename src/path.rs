@@ -1042,12 +1042,10 @@ impl Iterator for WalkDirIterator {
             match self.inner.next() {
                 Some(path) => break Some(Ok(path)),
                 None => {
-                    match self.todo.pop() {
-                        None => return None, // all done!
-                        Some(directory) => match directory.read_dir() {
-                            Ok(iterator) => self.inner = iterator,
-                            Err(err) => break Some(Err(err)),
-                        },
+                    let directory = self.todo.pop()?;
+                    match directory.read_dir() {
+                        Ok(iterator) => self.inner = iterator,
+                        Err(err) => break Some(Err(err)),
                     }
                 }
             }
