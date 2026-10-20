@@ -5,7 +5,6 @@ use crate::{
     error::VfsErrorKind,
 };
 use async_std::io::Write;
-use async_trait::async_trait;
 use futures::stream::{Stream, StreamExt};
 use std::time::SystemTime;
 
@@ -40,7 +39,6 @@ impl AsyncAltrootFS {
     }
 }
 
-#[async_trait]
 impl AsyncFileSystem for AsyncAltrootFS {
     async fn read_dir(
         &self,
