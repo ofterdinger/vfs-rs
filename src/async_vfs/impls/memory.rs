@@ -174,8 +174,8 @@ impl AsyncFileSystem for AsyncMemoryFS {
         #[allow(clippy::needless_collect)] // need collect to satisfy lifetime requirements
         let entries: Vec<String> = handle
             .files
-            .iter()
-            .filter_map(|(candidate_path, _)| {
+            .keys()
+            .filter_map(|candidate_path| {
                 if candidate_path == path {
                     found_directory = true;
                 }
