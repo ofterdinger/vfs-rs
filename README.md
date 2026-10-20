@@ -34,6 +34,13 @@ feedback, please leave a comment on [issue #77](https://github.com/manuel-woelke
 ## Changelog
 
 
+### 0.13.0 (2026-03-21)
+
+* cargo: set MSRV to 1.63 to match CI environment
+* fix spelling errors (#85) - thanks [@JordanGoulder](https://github.com/JordanGoulder)!
+* fix broken link to `EmbeddedFS` for doc.rs. (#88) - thanks [James2022-rgb](https://github.com/James2022-rgb) and  [@Infinoid](https://github.com/Infinoid)!
+* document the feature flag `export-test-macros` in lib.rs - thanks [@feznyng](https://github.com/feznyng) for the reminder!
+
 ### 0.12.2 (2025-07-12)
 * Path: reduced memory allocations when joining paths  - thanks 
   [@landaire](https://github.com/landaire)!
